@@ -8,7 +8,10 @@
 
   setupOpen.addEventListener('click', openPopup);
   setupClose.addEventListener('click', closePopup);
-  setupForm.addEventListener('submit', closePopup);
+  setupForm.addEventListener('submit', function(evt) {
+    window.backend.save(new FormData(setupForm), closePopup, onError)
+    evt.preventDefault();
+  });
   setupOpen.addEventListener('keydown', function(evt) {
     if (window.utils.isEnterKeycode(evt)) {
       openPopup();
@@ -19,6 +22,19 @@
       closePopup();
     }
   });
+
+  function onError(errorMessage) {
+    var node = document.createElement('div');
+    
+    node.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: red;';
+    node.style.position = 'absolute';
+    node.style.left = 0;
+    node.style.right = 0;
+    node.style.fontSize = '30px';
+    
+    node.textContent = errorMessage; 
+    document.body.insertAdjacentElement('afterbegin', node);
+  };
 
   function openPopup() {
     window.utils.setup.classList.remove('hidden');
