@@ -1,16 +1,19 @@
 'use strict';
 
 (function(){
-  var ESC_KEYCODE = 27;
-  var ENTER_KEYCODE = 13;
+  var KeyCode = {
+    ESC: 27,
+    ENTER: 13
+  };
+  var DEBOUNCE_INTERVAL = 500; // ms
 
   window.utils = {
     setup: document.querySelector('.setup'),
     isEnterKeycode: function(evt) {
-        return evt.keyCode === ENTER_KEYCODE;
+        return evt.keyCode === KeyCode.ENTER;
     },
     isEscKeycode: function(evt) {
-      return evt.keyCode === ESC_KEYCODE;
+      return evt.keyCode === KeyCode.ESC;
     },
     getRandomNum: function(array) {
       return Math.floor(Math.random() * array.length);
@@ -30,6 +33,17 @@
       }
     
       return array;
+    },
+    debounce: function(fun) {
+      var lastTimeout = null;
+  
+      return function() {
+        var args = arguments;
+        if (lastTimeout) clearTimeout(lastTimeout);
+        lastTimeout = setTimeout(function() {
+          fun.apply(null, args);
+        }, DEBOUNCE_INTERVAL);
+      };
     }
   }
 })();
